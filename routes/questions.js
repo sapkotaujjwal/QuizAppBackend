@@ -7,7 +7,7 @@ const { auth, authorize } = require('../middleware/auth');
 const router = express.Router();
 
 // Get all questions
-router.get('/', auth, authorize('admin', 'teacher'), async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const { subject, difficulty, search, page = 1, limit = 10 } = req.query;
     
@@ -221,7 +221,7 @@ router.delete('/:id', auth, authorize('admin', 'teacher'), async (req, res) => {
 });
 
 // Get subjects (for dropdown lists)
-router.get('/subjects/list', auth, authorize('admin', 'teacher'), async (req, res) => {
+router.get('/subjects/list', auth, async (req, res) => {
   try {
     const subjects = await Question.distinct('subject');
     res.json({

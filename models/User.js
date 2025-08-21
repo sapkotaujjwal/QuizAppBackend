@@ -60,18 +60,20 @@ const userSchema = new mongoose.Schema(
       default: 0,
     },
 
-    quizzesCreated: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Quiz",
-      },
-    ],
-    questionsCreated: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Question",
-      },
-    ],
+    // quizzesCreated: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Quiz",
+    //   },
+    // ],
+    // questionsCreated: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Question",
+    //   },
+    // ],
+
+    
   },
   {
     timestamps: true,

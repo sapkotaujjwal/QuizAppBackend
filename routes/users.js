@@ -263,4 +263,80 @@ router.delete("/:id", auth, authorize("admin"), async (req, res) => {
   }
 });
 
+// Route to change password
+router.put("/change-password", auth, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = req.user;
+
+    // Verify current password
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Current password is incorrect" });
+    }
+
+    // Validate new password
+    if (!newPassword || newPassword.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "New password must be at least 6 characters long" });
+    }
+
+    // Update password
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// Route to update profile
+router.put("/update-profile", auth, async (req, res) => {
+  try {
+    const { name, email, profileImage } = req.body;
+    const user = req.user;
+
+    // Validate input
+    if (!name && !email && !profileImage) {
+      return res
+        .status(400)
+        .json({ message: "At least one field must be provided for update" });
+    }
+
+    // Update fields if provided
+    if (name) {
+      if (name.length > 50) {
+        return res
+          .status(400)
+          .json({ message: "Name cannot exceed 50 characters" });
+      }
+      user.name = name.trim();
+    }
+
+    if (email) {
+      const existingUser = await User.findOne({
+        email: email.toLowerCase().trim(),
+      });
+      if (existingUser && existingUser._id.toString() !== user._id.toString()) {
+        return res.status(400).json({ message: "Email is already in use" });
+      }
+      user.email = email.toLowerCase().trim();
+      user.emailVerified = false; // Reset email verification if email changes
+    }
+
+    if (profileImage) {
+      user.profileImage = profileImage;
+    }
+
+    await user.save();
+    res
+      .status(200)
+      .json({ message: "Profile updated successfully", user: user.toJSON() });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
 module.exports = router;

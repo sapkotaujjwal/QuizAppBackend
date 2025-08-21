@@ -7,6 +7,52 @@ const { auth, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Get self detailed analytics
+router.get('/self', auth, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized: access required' });
+    }
+
+    // Fetch all quiz attempts for the student
+    const quizAttempts = await QuizAttempt.find({ student: req.user._id })
+      .populate({
+        path: 'quiz',
+        select: 'title subject passingScore questions'
+      })
+      .lean();
+
+    // Format the response to match the requested structure
+    const formattedAttempts = quizAttempts.map(attempt => ({
+      _id: attempt._id.toString(),
+      quiz: {
+        _id: attempt.quiz._id.toString(),
+        title: attempt.quiz.title,
+        subject: attempt.quiz.subject,
+        passingScore: attempt.quiz.passingScore,
+        totalQuestions: attempt.quiz.questions.length
+      },
+      score: attempt.score,
+      percentage: attempt.percentage,
+      timeSpent: attempt.timeSpent,
+      startedAt: attempt.startedAt.toISOString(),
+      submittedAt: attempt.submittedAt.toISOString(),
+      attemptNumber: attempt.attemptNumber,
+      passed: attempt.passed,
+      answers: attempt.answers.map(answer => ({
+        question: answer.question.toString(),
+        isCorrect: answer.isCorrect,
+        timeSpent: answer.timeSpent
+      }))
+    }));
+
+    res.json(formattedAttempts);
+  } catch (error) {
+    console.error('Error fetching quiz analytics:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Get dashboard statistics
 router.get('/dashboard', auth, async (req, res) => {
   try {

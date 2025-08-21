@@ -8,6 +8,49 @@ const { auth, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
+router.get('/my-quizzes', auth, async (req, res) => {
+  try {
+
+    const quizzes = await Quiz.find({ createdBy: req.user._id })
+      .populate({
+        path: 'questions',
+        select: '-__v', // Exclude __v field from questions
+        populate: {
+          path: 'createdBy',
+          select: 'name email' // Only include name and email of question creator
+        }
+      })
+      .populate('createdBy', 'name email') // Populate creator's name and email
+      .populate('allowedStudents', 'name email') // Populate allowed students' name and email
+      .select('-__v') // Exclude __v field from quiz
+      .lean(); // Convert to plain JavaScript object for better performance
+
+    // If no quizzes found, return empty array
+    if (!quizzes || quizzes.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+        message: 'No quizzes found for this user'
+      });
+    }
+
+    // Return the quizzes
+    res.status(200).json({
+      success: true,
+      count: quizzes.length,
+      data: quizzes
+    });
+  } catch (error) {
+    console.error('Error fetching user quizzes:', error);
+    console.log(error)
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching quizzes',
+      error: error.message
+    });
+  }
+});
+
 // Get all quizzes
 router.get('/', auth, async (req, res) => {
   try {
@@ -86,12 +129,14 @@ router.get('/:id', auth, async (req, res) => {
       }
 
       // For students, don't show correct answers
-      quiz.questions = quiz.questions.map(q => ({
-        ...q.toObject(),
-        options: q.options ? q.options.map(opt => ({ text: opt.text, _id: opt._id })) : [],
-        correctAnswer: undefined,
-        explanation: undefined
-      }));
+      // quiz.questions = quiz.questions.map(q => ({
+      //   ...q.toObject(),
+      //   options: q.options ? q.options.map(opt => ({ text: opt.text, _id: opt._id })) : [],
+      //   correctAnswer: undefined,
+      //   explanation: undefined
+      // }));
+
+
     } else if (req.user.role === 'teacher' && quiz.createdBy._id.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
@@ -124,12 +169,12 @@ router.get('/:id', auth, async (req, res) => {
 
 // Create quiz
 router.post('/', auth, authorize('admin', 'teacher'), [
-  body('title').trim().isLength({ min: 5, max: 200 }),
-  body('subject').isLength({ min: 2 }),
+  body('title').trim().isLength(),
+  body('subject').isLength(),
   body('questions').isArray().isLength({ min: 1 }),
-  body('timeLimit').optional().isInt({ min: 5, max: 300 }),
-  body('maxAttempts').optional().isInt({ min: 1, max: 10 }),
-  body('passingScore').optional().isInt({ min: 0, max: 100 })
+  body('timeLimit').optional().isInt(),
+  body('maxAttempts').optional().isInt(),
+  body('passingScore').optional().isInt()
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -367,6 +412,7 @@ router.post('/:id/submit', auth, authorize('student'), async (req, res) => {
   }
 });
 
+
 // Get quiz attempts (for teachers to see student attempts)
 router.get('/:id/attempts', auth, authorize('admin', 'teacher'), async (req, res) => {
   try {
@@ -411,5 +457,11 @@ router.get('/:id/attempts', auth, authorize('admin', 'teacher'), async (req, res
     });
   }
 });
+
+
+
+
+
+module.exports = router;
 
 module.exports = router;
