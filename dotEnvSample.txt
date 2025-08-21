@@ -1,0 +1,14 @@
+// .env (example configuration)
+NODE_ENV=development
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/learning_platform
+JWT_SECRET=your-super-secret-jwt-key-here-change-this-in-production
+FRONTEND_URL=http://localhost:5173
+
+# Email configuration
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-email-password
+FROM_NAME=Learning Platform
+FROM_EMAIL=your-email@gmail.com
