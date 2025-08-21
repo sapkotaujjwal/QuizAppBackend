@@ -1,0 +1,599 @@
+{
+	"info": {
+		"name": "Quiz Platform API",
+		"description": "Complete API collection for Quiz Platform with dummy data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"student\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/me",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "me"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "logout"]
+						}
+					}
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/forgot-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "forgot-password"]
+						}
+					}
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"otp\": \"123456\",\n  \"newPassword\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/reset-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "reset-password"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users?role=student&search=john&page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["users"],
+							"query": [
+								{
+									"key": "role",
+									"value": "student"
+								},
+								{
+									"key": "search",
+									"value": "john"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/64f5a1b2e3d4c5f6a7b8c9d0",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "64f5a1b2e3d4c5f6a7b8c9d0"]
+						}
+					}
+				},
+				{
+					"name": "Create User (Admin Only)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane.smith@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"teacher\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": ["{{baseUrl}}"],
+							"path": ["users"]
+						}
+					}
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Updated\",\n  \"email\": \"john.updated@example.com\",\n  \"teachingSubjects\": [\"Mathematics\", \"Physics\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/64f5a1b2e3d4c5f6a7b8c9d0",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "64f5a1b2e3d4c5f6a7b8c9d0"]
+						}
+					}
+				},
+				{
+					"name": "Delete User (Admin Only)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/64f5a1b2e3d4c5f6a7b8c9d0",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "64f5a1b2e3d4c5f6a7b8c9d0"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Questions",
+			"item": [
+				{
+					"name": "Get All Questions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/questions?subject=Mathematics&difficulty=medium&search=algebra&page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["questions"],
+							"query": [
+								{
+									"key": "subject",
+									"value": "Mathematics"
+								},
+								{
+									"key": "difficulty",
+									"value": "medium"
+								},
+								{
+									"key": "search",
+									"value": "algebra"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Question by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/questions/64f5a1b2e3d4c5f6a7b8c9d1",
+							"host": ["{{baseUrl}}"],
+							"path": ["questions", "64f5a1b2e3d4c5f6a7b8c9d1"]
+						}
+					}
+				},
+				{
+					"name": "Create Multiple Choice Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Basic Algebra Question\",\n  \"questionText\": \"What is the value of x in the equation 2x + 5 = 15?\",\n  \"questionType\": \"multiple-choice\",\n  \"subject\": \"Mathematics\",\n  \"difficulty\": \"easy\",\n  \"options\": [\n    {\n      \"text\": \"5\",\n      \"isCorrect\": true\n    },\n    {\n      \"text\": \"10\",\n      \"isCorrect\": false\n    },\n    {\n      \"text\": \"7.5\",\n      \"isCorrect\": false\n    },\n    {\n      \"text\": \"2.5\",\n      \"isCorrect\": false\n    }\n  ],\n  \"explanation\": \"2x + 5 = 15, so 2x = 10, therefore x = 5\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/questions",
+							"host": ["{{baseUrl}}"],
+							"path": ["questions"]
+						}
+					}
+				},
+				{
+					"name": "Create True/False Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Physics - Newton's First Law\",\n  \"questionText\": \"Newton's first law states that an object at rest stays at rest unless acted upon by an external force.\",\n  \"questionType\": \"true-false\",\n  \"subject\": \"Physics\",\n  \"difficulty\": \"easy\",\n  \"options\": [\n    {\n      \"text\": \"True\",\n      \"isCorrect\": true\n    },\n    {\n      \"text\": \"False\",\n      \"isCorrect\": false\n    }\n  ],\n  \"explanation\": \"This is indeed Newton's first law of motion, also known as the law of inertia.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/questions",
+							"host": ["{{baseUrl}}"],
+							"path": ["questions"]
+						}
+					}
+				},
+				{
+					"name": "Create Short Answer Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Chemistry - Water Formula\",\n  \"questionText\": \"What is the chemical formula for water?\",\n  \"questionType\": \"short-answer\",\n  \"subject\": \"Chemistry\",\n  \"difficulty\": \"easy\",\n  \"correctAnswer\": \"H2O\",\n  \"explanation\": \"Water consists of two hydrogen atoms and one oxygen atom, hence H2O.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/questions",
+							"host": ["{{baseUrl}}"],
+							"path": ["questions"]
+						}
+					}
+				},
+				{
+					"name": "Update Question",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Algebra Question\",\n  \"questionText\": \"What is the value of x in the equation 3x + 7 = 22?\",\n  \"difficulty\": \"medium\",\n  \"options\": [\n    {\n      \"text\": \"5\",\n      \"isCorrect\": true\n    },\n    {\n      \"text\": \"7\",\n      \"isCorrect\": false\n    },\n    {\n      \"text\": \"15\",\n      \"isCorrect\": false\n    },\n    {\n      \"text\": \"3\",\n      \"isCorrect\": false\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/questions/64f5a1b2e3d4c5f6a7b8c9d1",
+							"host": ["{{baseUrl}}"],
+							"path": ["questions", "64f5a1b2e3d4c5f6a7b8c9d1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Question",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/questions/64f5a1b2e3d4c5f6a7b8c9d1",
+							"host": ["{{baseUrl}}"],
+							"path": ["questions", "64f5a1b2e3d4c5f6a7b8c9d1"]
+						}
+					}
+				},
+				{
+					"name": "Get Subjects List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/questions/subjects/list",
+							"host": ["{{baseUrl}}"],
+							"path": ["questions", "subjects", "list"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Quizzes",
+			"item": [
+				{
+					"name": "Get All Quizzes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/quizzes?subject=Mathematics&isPublished=true&page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["quizzes"],
+							"query": [
+								{
+									"key": "subject",
+									"value": "Mathematics"
+								},
+								{
+									"key": "isPublished",
+									"value": "true"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Quiz by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/quizzes/64f5a1b2e3d4c5f6a7b8c9d2",
+							"host": ["{{baseUrl}}"],
+							"path": ["quizzes", "64f5a1b2e3d4c5f6a7b8c9d2"]
+						}
+					}
+				},
+				{
+					"name": "Create Quiz",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Mathematics Fundamentals Quiz\",\n  \"description\": \"A comprehensive quiz covering basic mathematical concepts including algebra and geometry.\",\n  \"subject\": \"Mathematics\",\n  \"questions\": [\n    \"64f5a1b2e3d4c5f6a7b8c9d1\",\n    \"64f5a1b2e3d4c5f6a7b8c9d3\",\n    \"64f5a1b2e3d4c5f6a7b8c9d4\"\n  ],\n  \"timeLimit\": 30,\n  \"maxAttempts\": 3,\n  \"passingScore\": 70,\n  \"isPublished\": false,\n  \"allowedStudents\": [],\n  \"instructions\": \"Read each question carefully and select the best answer. You have 30 minutes to complete this quiz.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quizzes",
+							"host": ["{{baseUrl}}"],
+							"path": ["quizzes"]
+						}
+					}
+				},
+				{
+					"name": "Update Quiz",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Mathematics Quiz\",\n  \"description\": \"Updated comprehensive quiz covering mathematical concepts.\",\n  \"timeLimit\": 45,\n  \"passingScore\": 75,\n  \"isPublished\": true,\n  \"allowedStudents\": [\"64f5a1b2e3d4c5f6a7b8c9d0\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quizzes/64f5a1b2e3d4c5f6a7b8c9d2",
+							"host": ["{{baseUrl}}"],
+							"path": ["quizzes", "64f5a1b2e3d4c5f6a7b8c9d2"]
+						}
+					}
+				},
+				{
+					"name": "Delete Quiz",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/quizzes/64f5a1b2e3d4c5f6a7b8c9d2",
+							"host": ["{{baseUrl}}"],
+							"path": ["quizzes", "64f5a1b2e3d4c5f6a7b8c9d2"]
+						}
+					}
+				},
+				{
+					"name": "Submit Quiz Attempt",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"answers\": [\n    {\n      \"questionId\": \"64f5a1b2e3d4c5f6a7b8c9d1\",\n      \"selectedAnswer\": \"64f5a1b2e3d4c5f6a7b8c9d5\",\n      \"timeSpent\": 120\n    },\n    {\n      \"questionId\": \"64f5a1b2e3d4c5f6a7b8c9d3\",\n      \"selectedAnswer\": \"True\",\n      \"timeSpent\": 90\n    },\n    {\n      \"questionId\": \"64f5a1b2e3d4c5f6a7b8c9d4\",\n      \"selectedAnswer\": \"H2O\",\n      \"timeSpent\": 60\n    }\n  ],\n  \"timeSpent\": 270\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/quizzes/64f5a1b2e3d4c5f6a7b8c9d2/submit",
+							"host": ["{{baseUrl}}"],
+							"path": ["quizzes", "64f5a1b2e3d4c5f6a7b8c9d2", "submit"]
+						}
+					}
+				},
+				{
+					"name": "Get Quiz Attempts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/quizzes/64f5a1b2e3d4c5f6a7b8c9d2/attempts?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["quizzes", "64f5a1b2e3d4c5f6a7b8c9d2", "attempts"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Analytics",
+			"item": [
+				{
+					"name": "Get Dashboard Statistics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/analytics/dashboard",
+							"host": ["{{baseUrl}}"],
+							"path": ["analytics", "dashboard"]
+						}
+					}
+				},
+				{
+					"name": "Get Student Performance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/analytics/student-performance?studentId=64f5a1b2e3d4c5f6a7b8c9d0&quizId=64f5a1b2e3d4c5f6a7b8c9d2",
+							"host": ["{{baseUrl}}"],
+							"path": ["analytics", "student-performance"],
+							"query": [
+								{
+									"key": "studentId",
+									"value": "64f5a1b2e3d4c5f6a7b8c9d0"
+								},
+								{
+									"key": "quizId",
+									"value": "64f5a1b2e3d4c5f6a7b8c9d2"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Quiz Analytics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/analytics/quiz-analytics/64f5a1b2e3d4c5f6a7b8c9d2",
+							"host": ["{{baseUrl}}"],
+							"path": ["analytics", "quiz-analytics", "64f5a1b2e3d4c5f6a7b8c9d2"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
